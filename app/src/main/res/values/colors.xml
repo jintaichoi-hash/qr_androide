@@ -1,0 +1,7 @@
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="bg_dark">#FF0B0F19</color>
+    <color name="accent_indigo">#FF6366F1</color>
+</resources>
+

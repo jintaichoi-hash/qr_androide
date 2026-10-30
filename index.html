@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NOVA Calc — 스마트 올인원 계산기</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Background Ambient Glows -->
+  <div class="ambient-blob blob-1"></div>
+  <div class="ambient-blob blob-2"></div>
+  <div class="ambient-blob blob-3"></div>
+
+  <div class="app-container">
+    <!-- Top Navigation Bar -->
+    <header class="app-header">
+      <div class="brand">
+        <div class="brand-logo">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="2" width="16" height="20" rx="3"></rect>
+            <line x1="8" y1="6" x2="16" y2="6"></line>
+            <line x1="16" y1="14" x2="16" y2="18"></line>
+            <path d="M16 10h.01"></path>
+            <path d="M12 10h.01"></path>
+            <path d="M8 10h.01"></path>
+            <path d="M12 14h.01"></path>
+            <path d="M8 14h.01"></path>
+            <path d="M12 18h.01"></path>
+            <path d="M8 18h.01"></path>
+          </svg>
+        </div>
+        <div>
+          <h1 class="brand-title">NOVA <span>Smart Calc</span></h1>
+          <p class="brand-subtitle">지능형 올인원 웹 계산기</p>
+        </div>
+      </div>
+
+      <!-- Mode Switcher Tabs -->
+      <nav class="mode-tabs" role="tablist">
+        <button class="mode-tab active" data-mode="calculator" role="tab" aria-selected="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/></svg>
+          계산기
+        </button>
+        <button class="mode-tab" data-mode="smartnote" role="tab" aria-selected="false">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+          스마트 수식 노트
+        </button>
+        <button class="mode-tab" data-mode="lifetools" role="tab" aria-selected="false">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          실생활 계산
+        </button>
+      </nav>
+
+      <!-- Header Actions -->
+      <div class="header-actions">
+        <button id="soundToggle" class="icon-btn" title="클릭 효과음 켜기/끄기" aria-label="효과음 토글">
+          <svg id="soundOnIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
+          <svg id="soundOffIcon" class="hidden" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+        </button>
+        <button id="themeToggle" class="icon-btn" title="다크/라이트 모드 전환" aria-label="테마 전환">
+          <svg id="sunIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+          <svg id="moonIcon" class="hidden" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content Layout -->
+    <main class="main-grid">
+      <!-- Left / Center Active Workspace -->
+      <section class="workspace-panel">
+
+        <!-- MODE 1: STANDARD & SCIENTIFIC CALCULATOR -->
+        <div id="mode-calculator" class="mode-view active">
+          <div class="calc-card">
+            <!-- Display Screen -->
+            <div class="display-container">
+              <div class="display-top-bar">
+                <div class="display-badges">
+                  <span id="angleBadge" class="badge clickable" title="클릭하여 DEG/RAD 전환">DEG</span>
+                  <span id="memoryBadge" class="badge memory-badge hidden">M</span>
+                </div>
+                <div class="sci-toggle-wrapper">
+                  <button id="sciToggleBtn" class="sci-toggle-btn" type="button">
+                    <span>공학 함수</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Previous Expression / History Line -->
+              <div id="prevExpression" class="prev-expression" aria-live="polite"></div>
+
+              <!-- Current Input Expression -->
+              <div class="expression-wrapper">
+                <input
+                  type="text"
+                  id="expressionInput"
+                  class="expression-input"
+                  placeholder="0"
+                  autocomplete="off"
+                  spellcheck="false"
+                  aria-label="계산 수식 입력"
+                />
+              </div>
+
+              <!-- Live Preview & Korean Unit Helper -->
+              <div class="display-footer">
+                <div id="koreanUnitPreview" class="korean-unit-preview"></div>
+                <div class="live-preview-row">
+                  <span id="livePreview" class="live-preview"></span>
+                  <button id="copyResultBtn" class="copy-mini-btn" title="결과 복사" aria-label="결과 복사">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Memory Bar -->
+            <div class="memory-bar">
+              <button class="mem-btn" data-action="mc" title="메모리 초기화 (Memory Clear)">MC</button>
+              <button class="mem-btn" data-action="mr" title="메모리 불러오기 (Memory Recall)">MR</button>
+              <button class="mem-btn" data-action="m-plus" title="메모리에 더하기 (Memory +)">M+</button>
+              <button class="mem-btn" data-action="m-minus" title="메모리에서 빼기 (Memory -)">M-</button>
+              <button class="mem-btn" data-action="ans" title="직전 계산 결과 (Answer)">ANS</button>
+            </div>
+
+            <!-- Scientific Drawer (Collapsible) -->
+            <div id="scientificPad" class="scientific-pad">
+              <button class="calc-btn sci-btn" data-insert="sin(">sin</button>
+              <button class="calc-btn sci-btn" data-insert="cos(">cos</button>
+              <button class="calc-btn sci-btn" data-insert="tan(">tan</button>
+              <button class="calc-btn sci-btn" data-insert="log(">log</button>
+              <button class="calc-btn sci-btn" data-insert="ln(">ln</button>
+              <button class="calc-btn sci-btn" data-insert="√(">√x</button>
+              <button class="calc-btn sci-btn" data-insert="^">xʸ</button>
+              <button class="calc-btn sci-btn" data-insert="^2">x²</button>
+              <button class="calc-btn sci-btn" data-insert="!">n!</button>
+              <button class="calc-btn sci-btn" data-insert="π">π</button>
+              <button class="calc-btn sci-btn" data-insert="e">e</button>
+              <button class="calc-btn sci-btn" data-insert="abs(">|x|</button>
+            </div>
+
+            <!-- Main Keypad -->
+            <div class="keypad">
+              <button class="calc-btn fn-btn danger-text" data-action="clear" data-key="Escape">AC</button>
+              <button class="calc-btn fn-btn" data-action="parens" data-key="(">( )</button>
+              <button class="calc-btn fn-btn" data-insert="%" data-key="%">%</button>
+              <button class="calc-btn op-btn" data-insert="÷" data-key="/">÷</button>
+
+              <button class="calc-btn num-btn" data-insert="7" data-key="7">7</button>
+              <button class="calc-btn num-btn" data-insert="8" data-key="8">8</button>
+              <button class="calc-btn num-btn" data-insert="9" data-key="9">9</button>
+              <button class="calc-btn op-btn" data-insert="×" data-key="*">×</button>
+
+              <button class="calc-btn num-btn" data-insert="4" data-key="4">4</button>
+              <button class="calc-btn num-btn" data-insert="5" data-key="5">5</button>
+              <button class="calc-btn num-btn" data-insert="6" data-key="6">6</button>
+              <button class="calc-btn op-btn" data-insert="−" data-key="-">−</button>
+
+              <button class="calc-btn num-btn" data-insert="1" data-key="1">1</button>
+              <button class="calc-btn num-btn" data-insert="2" data-key="2">2</button>
+              <button class="calc-btn num-btn" data-insert="3" data-key="3">3</button>
+              <button class="calc-btn op-btn" data-insert="+" data-key="+">+</button>
+
+              <button class="calc-btn num-btn" data-action="negate" title="부호 변경">±</button>
+              <button class="calc-btn num-btn" data-insert="0" data-key="0">0</button>
+              <button class="calc-btn num-btn" data-insert="." data-key=".">.</button>
+              <button class="calc-btn eq-btn" data-action="evaluate" data-key="Enter">=</button>
+            </div>
+
+            <!-- Bottom Utility Bar (Backspace & Quick Zeroes) -->
+            <div class="keypad-footer">
+              <button class="quick-btn" data-insert="00">+00</button>
+              <button class="quick-btn" data-insert="000">+000 (천)</button>
+              <button class="quick-btn" data-insert="0000">+0000 (만)</button>
+              <button class="quick-btn backspace-btn" data-action="backspace" data-key="Backspace" title="한 글자 지우기 (Backspace)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"></path><line x1="18" y1="9" x2="12" y2="15"></line><line x1="12" y1="9" x2="18" y2="15"></line></svg>
+                지우기
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- MODE 2: SMART EXPRESSION NOTE -->
+        <div id="mode-smartnote" class="mode-view">
+          <div class="smartnote-card">
+            <div class="smartnote-header">
+              <div>
+                <h2>스마트 수식 노트</h2>
+                <p>줄마다 메모와 계산식을 함께 적으면 실시간으로 계산하고 총합을 구해줍니다.</p>
+              </div>
+              <div class="smartnote-actions">
+                <button id="loadSampleNoteBtn" class="secondary-btn">예시 불러오기</button>
+                <button id="clearNoteBtn" class="secondary-btn">비우기</button>
+              </div>
+            </div>
+
+            <div class="smartnote-editor-container">
+              <textarea
+                id="smartNoteInput"
+                class="smartnote-textarea"
+                spellcheck="false"
+                placeholder="예시:&#10;아메리카노 4500 * 4&#10;케이크 6800 * 2&#10;할인 -3000&#10;부가세 150000의 10%"
+              ></textarea>
+              <div id="smartNoteResults" class="smartnote-results"></div>
+            </div>
+
+            <div class="smartnote-summary">
+              <div class="summary-item">
+                <span class="summary-label">유효 계산 줄</span>
+                <strong id="noteLineCount">0개</strong>
+              </div>
+              <div class="summary-item">
+                <span class="summary-label">평균</span>
+                <strong id="noteAverage">0</strong>
+              </div>
+              <div class="summary-item highlight">
+                <span class="summary-label">총 합계 (Total)</span>
+                <div class="total-copy-group">
+                  <strong id="noteTotal">0</strong>
+                  <button id="copyNoteTotalBtn" class="copy-mini-btn" title="총합 복사">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MODE 3: SMART LIFE TOOLS -->
+        <div id="mode-lifetools" class="mode-view">
+          <div class="lifetools-grid">
+            <!-- Sub-tab selector -->
+            <div class="subtool-tabs">
+              <button class="subtool-tab active" data-subtool="split">더치페이 / N빵</button>
+              <button class="subtool-tab" data-subtool="discount">할인율 / 퍼센트</button>
+              <button class="subtool-tab" data-subtool="unit">스마트 단위 변환</button>
+              <button class="subtool-tab" data-subtool="bmi">BMI / 칼로리</button>
+            </div>
+
+            <!-- Tool 1: Split Bill (더치페이) -->
+            <div id="subtool-split" class="subtool-panel active">
+              <div class="tool-form">
+                <div class="input-group">
+                  <label for="splitTotal">총 결제 금액 (원)</label>
+                  <input type="number" id="splitTotal" value="58000" min="0" step="100" />
+                </div>
+                <div class="input-row">
+                  <div class="input-group">
+                    <label for="splitPeople">인원수 (명)</label>
+                    <div class="stepper-input">
+                      <button type="button" class="step-btn" data-step-target="splitPeople" data-step="-1">−</button>
+                      <input type="number" id="splitPeople" value="4" min="1" max="100" />
+                      <button type="button" class="step-btn" data-step-target="splitPeople" data-step="1">+</button>
+                    </div>
+                  </div>
+                  <div class="input-group">
+                    <label for="splitTip">봉사료 / 추가 팁 (%)</label>
+                    <input type="number" id="splitTip" value="0" min="0" max="100" />
+                  </div>
+                </div>
+                <div class="input-group">
+                  <label>잔돈 단위 깔끔 정산</label>
+                  <div class="pill-group" id="splitRoundGroup">
+                    <button type="button" class="pill-btn active" data-round="1">정확히 (1원)</button>
+                    <button type="button" class="pill-btn" data-round="100">100원 단위</button>
+                    <button type="button" class="pill-btn" data-round="1000">1,000원 단위</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="tool-result-card">
+                <div class="result-main">
+                  <span>1인당 보낼 금액</span>
+                  <strong id="splitPerPerson">14,500원</strong>
+                </div>
+                <div class="result-details">
+                  <div><span>총 결제 금액 (팁 포함)</span><b id="splitFinalTotal">58,000원</b></div>
+                  <div><span>정산 후 남거나 모자란 차액</span><b id="splitRemainder">0원</b></div>
+                </div>
+                <button id="sendSplitToCalc" class="action-link-btn">계산기로 결과 보내기 →</button>
+              </div>
+            </div>
+
+            <!-- Tool 2: Discount Calculator (할인율) -->
+            <div id="subtool-discount" class="subtool-panel">
+              <div class="tool-form">
+                <div class="input-group">
+                  <label for="discOriginal">원래 가격 (원)</label>
+                  <input type="number" id="discOriginal" value="89000" min="0" step="1000" />
+                </div>
+                <div class="input-row">
+                  <div class="input-group">
+                    <label for="discRate">기본 할인율 (%)</label>
+                    <input type="number" id="discRate" value="20" min="0" max="100" />
+                  </div>
+                  <div class="input-group">
+                    <label for="discExtra">추가 쿠폰 할인 (%)</label>
+                    <input type="number" id="discExtra" value="5" min="0" max="100" />
+                  </div>
+                </div>
+                <div class="pill-group">
+                  <button type="button" class="pill-btn quick-disc" data-rate="10">10%</button>
+                  <button type="button" class="pill-btn quick-disc" data-rate="15">15%</button>
+                  <button type="button" class="pill-btn quick-disc" data-rate="20">20%</button>
+                  <button type="button" class="pill-btn quick-disc" data-rate="30">30%</button>
+                  <button type="button" class="pill-btn quick-disc" data-rate="50">50%</button>
+                </div>
+              </div>
+
+              <div class="tool-result-card">
+                <div class="result-main">
+                  <span>최종 구매 가격</span>
+                  <strong id="discFinalPrice">67,640원</strong>
+                </div>
+                <div class="result-details">
+                  <div><span>총 할인받은 금액</span><b id="discSavedAmount" class="accent-green">-21,360원</b></div>
+                  <div><span>실질 체감 할인율</span><b id="discEffectiveRate">24.0%</b></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tool 3: Unit Converter (단위 변환) -->
+            <div id="subtool-unit" class="subtool-panel">
+              <div class="tool-form">
+                <div class="input-group">
+                  <label for="unitCategory">변환 카테고리</label>
+                  <select id="unitCategory" class="styled-select">
+                    <option value="area">부동산 면적 (평 ↔ ㎡)</option>
+                    <option value="length">길이 (cm, m, km, inch, ft)</option>
+                    <option value="weight">무게 (g, kg, lb, oz, 근)</option>
+                    <option value="temp">온도 (°C, °F, K)</option>
+                    <option value="data">데이터 용량 (MB, GB, TB)</option>
+                  </select>
+                </div>
+                <div class="converter-box">
+                  <div class="conv-side">
+                    <input type="number" id="unitInputVal" value="34" step="any" />
+                    <select id="unitFrom" class="styled-select"></select>
+                  </div>
+                  <button id="swapUnitsBtn" class="swap-btn" title="단위 서로 바꾸기">⇄</button>
+                  <div class="conv-side">
+                    <input type="text" id="unitOutputVal" readonly />
+                    <select id="unitTo" class="styled-select"></select>
+                  </div>
+                </div>
+                <p id="unitFormulaHint" class="unit-hint">1평 ≈ 3.305785 ㎡</p>
+              </div>
+            </div>
+
+            <!-- Tool 4: BMI Calculator -->
+            <div id="subtool-bmi" class="subtool-panel">
+              <div class="tool-form">
+                <div class="input-row">
+                  <div class="input-group">
+                    <label for="bmiHeight">신장 (cm)</label>
+                    <input type="number" id="bmiHeight" value="172" min="50" max="250" />
+                  </div>
+                  <div class="input-group">
+                    <label for="bmiWeight">체중 (kg)</label>
+                    <input type="number" id="bmiWeight" value="68" min="10" max="300" />
+                  </div>
+                </div>
+              </div>
+              <div class="tool-result-card">
+                <div class="result-main">
+                  <span>체질량지수 (BMI)</span>
+                  <strong id="bmiValue">22.99</strong>
+                </div>
+                <div class="result-details">
+                  <div><span>판정 상태 (대한비만학회 기준)</span><b id="bmiStatus" class="accent-green">정상</b></div>
+                  <div><span>표준 권장 체중 범위</span><b id="bmiIdealRange">54.7kg ~ 67.7kg</b></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Sidebar: Calculation History & Pinned Items -->
+      <aside class="history-panel">
+        <div class="history-header">
+          <div class="history-title-group">
+            <h3>계산 기록</h3>
+            <span id="historyCount" class="count-pill">0</span>
+          </div>
+          <button id="clearHistoryBtn" class="text-danger-btn" title="고정되지 않은 기록 삭제">전체 비우기</button>
+        </div>
+
+        <div id="historyList" class="history-list">
+          <div class="history-empty">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <p>아직 계산 기록이 없습니다.<br/>계산기를 누르거나 키보드로 입력해 보세요!</p>
+          </div>
+        </div>
+
+        <div class="keyboard-shortcuts-card">
+          <h4>💡 스마트 팁 & 단축키</h4>
+          <ul>
+            <li><kbd>0-9</kbd> <kbd>+</kbd> <kbd>-</kbd> <kbd>*</kbd> <kbd>/</kbd> 키보드 직접 입력</li>
+            <li><kbd>Enter</kbd> 계산 실행 · <kbd>Esc</kbd> 전체 초기화</li>
+            <li>기록 클릭 시 수식이나 결과를 바로 불러옵니다</li>
+          </ul>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast" role="status" aria-live="polite">복사되었습니다!</div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
